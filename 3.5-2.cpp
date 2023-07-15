@@ -2,28 +2,30 @@
 //
 #include <iostream>
 #include <Windows.h>
+
+
+
 class Triangle {
 public:
     std::string name;
     int a;
     int b;
     int c;
-    int d;
     int A;
     int B;
     int C;
-    int D;
-    Triangle(int a1, int b1, int c1, int A1, int B1, int C1) {
+
+    Triangle(int a, int b, int c, int A, int B, int C) {
         name = "Треугольник: ";
-        a = a1;
-        b = b1;
-        c = c1;
-        A = A1;
-        B = B1;
-        C = C1;
+       this-> a = a;
+       this->b = b;
+       this->c = c;
+       this->A = A;
+       this->B = B;
+       this->C = C;
     }
 
-    void print() {
+    virtual void print() {
         std::cout << name << "\nСтороны: a=" << a << " b=" << b << " c=" << c;
         std::cout << "\nУглы: A=" << A << " B=" << B << " C=" << C << "\n\n";
     }
@@ -32,7 +34,7 @@ public:
 class Triangle_p : public Triangle {
 public:
     
-    Triangle_p(int a1, int b1, int c1, int A1) : Triangle(a1,b1,c1,A1,90,90-A1) {
+    Triangle_p(int a, int b, int c, int A) : Triangle(a,b,c,A,90,90-A) {
         name = "Прямоугольный треугольник: ";
         //B = 90;
         //C = 180 - (A+B);
@@ -42,9 +44,9 @@ public:
 class Triangle_rb : public Triangle {
 public:
 
-    Triangle_rb (int b1, int c1, int A1) : Triangle(b1,b1,c1, A1, A1, 180 - 2*A1) {
+    Triangle_rb (int b, int c, int A) : Triangle(b,b,c, A, A, 180 - 2*A) {
         name = "Равнобедренный треугольник: ";
-        //a = b1;
+        //a = b;
         //C = B;
         //A = 180 - C * 2;
     }
@@ -53,7 +55,7 @@ public:
 class Triangle_rs : public Triangle {
 public:
 
-    Triangle_rs (int b1) : Triangle(b1, b1, b1, 60, 60, 60) {
+    Triangle_rs (int b) : Triangle(b, b, b, 60, 60, 60) {
         name = "Равносторонний треугольник: ";
         //a = c;
         //b = c;
@@ -64,26 +66,28 @@ public:
 };
 class Quadrangle : public Triangle {
 public:
-    Quadrangle(int a1, int b1, int c1, int d1, int A1, int B1, int C1, int D1) : Triangle(a1, b1, c1, A1, B1, C1) {
+    int d;
+    int D;
+    Quadrangle(int a, int b, int c, int d, int A, int B, int C, int D) : Triangle(a, b, c, A, B, C) {
         name = "Четырёхугольник: ";
         //a = 10;
         //b = 20;
         //c = 30;
-        d = 40;
+        this->d=d;
         //A = 40;
         //B = 30;
         //C = 110;
-        D = 12;
+        this->D=D;
     }
    
-    void print() {
+    virtual void print() {
         std::cout << name << "\nСтороны: a=" << a << " b=" << b << " c=" << c << " d=" << d;
         std::cout << "\nУглы: A=" << A << " B=" << B << " C=" << C << " D=" << D << "\n\n";
     }
 };
 class Quadrangle_p : public Quadrangle {
 public:
-    Quadrangle_p(int a1, int b1, int A1, int B1) : Quadrangle(a1, b1, a1, b1, A1, B1, A1, B1){
+    Quadrangle_p(int a, int b, int A, int B) : Quadrangle(a, b, a, b, A, B, A, B){
         name = "Параллелограмм: ";
         //a = c;
         //b = d;
@@ -93,7 +97,7 @@ public:
 };
 class Quadrangle_r : public Quadrangle_p {
 public:
-    Quadrangle_r(int a1, int A1, int B1) : Quadrangle_p(a1, a1, A1, B1) {
+    Quadrangle_r(int a, int A, int B) : Quadrangle_p(a, a, A, B) {
         name = "Ромб: ";
         //b = a;
         //d = a;
@@ -101,18 +105,22 @@ public:
 };
 class Quadrangle_par : public Quadrangle_p {
 public:
-    Quadrangle_par(int a1, int b1 ) : Quadrangle_p(a1, b1, 90, 90) {
+    Quadrangle_par(int a, int b ) : Quadrangle_p(a, b, 90, 90) {
         name = "Прямоугольник: ";
         //A=B=C=D =90 ;
     }
 };
 class Quadrangle_kv : public Quadrangle_par {
 public:
-    Quadrangle_kv(int a1) : Quadrangle_par(a1, a1) {
+    Quadrangle_kv(int a) : Quadrangle_par(a, a) {
         name = "Квадрат: ";
         //b = d = a;
     }
 };
+
+void print_info(Triangle* p) {
+    p->print();
+}
 
 
 int main()
@@ -120,32 +128,52 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     Triangle t(10, 20,30, 40, 30,110);
-    t.print();
+  /*  t.print();*/
+    Triangle* t1 = &t;
+    print_info(t1);
     
     Triangle_p t_p(10, 20, 30, 40);
-    t_p.print();
+    //t_p.print();
+    Triangle* t_p1 = &t_p;
+    print_info(t_p1);
     
     Triangle_rb rb(20, 30, 40);
-    rb.print();
-    
+    //rb.print();
+    Triangle* rb1 = &rb;
+    print_info(rb1);
+
     Triangle_rs rs(40);
-    rs.print();
+   // rs.print();
+    Triangle* rs1 = &rs;
+    print_info(rs1);
 
 
     Quadrangle q(10, 20, 30, 40, 40, 30, 110, 12);
-    q.print();
+    //q.print();
+    Triangle* q1 = &q;
+    print_info(q1);
 
     Quadrangle_p p(20, 30, 30, 110);
-    p.print();
+    //p.print();
+    Triangle* p1 = &p;
+    print_info(p1);
+
 
     Quadrangle_r r(30, 30, 110);
-    r.print();
+    //r.print();
+    Triangle* r1 = &r;
+    print_info(r1);
 
     Quadrangle_par par(30, 50);
-    par.print();
+    //par.print();
+    Triangle* par1 = &par;
+    print_info(par1);
 
     Quadrangle_kv kv(50);
-    kv.print();
+    //kv.print();
+    Triangle* kv1 = &kv;
+    print_info(kv1);
+
 
     std::cout << "Конец файла!\n";
     return 0;
